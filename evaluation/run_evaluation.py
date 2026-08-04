@@ -111,7 +111,10 @@ async def evaluate_query(test_case: dict[str, str]) -> dict[str, Any]:
                 config=config,
             )
 
-        actual_route = safe_value(final_state, "selected_agent")
+        completed_agents = safe_value(final_state, "completed_agents", [])
+        actual_route = " -> ".join(completed_agents)
+        if not actual_route:
+            actual_route = safe_value(final_state, "selected_agent")
         if not actual_route and not safe_value(final_state, "input_safe", True):
             actual_route = "input_guard -> end"
 

@@ -6,6 +6,10 @@ class AgentState(TypedDict):
     selected_agent:str #to avoid losing info abt who handled the req when "end"
     iteration_count:int
     specialist_results: list[str]
+    completed_agents: list[str]
+    required_agents: list[str]
+    agent_tasks: dict[str, str]
+    remaining_task: str
     input_safe:bool
     output_safe:bool
     guard_message:str

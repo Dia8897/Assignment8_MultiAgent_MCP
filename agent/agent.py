@@ -17,6 +17,10 @@ def create_initial_state(user_message: str) -> dict:
         "output_safe": True,
         "guard_message": "",
         "input_classification": "",
+        "completed_agents": [],
+        "required_agents": [],
+        "agent_tasks": {},
+        "remaining_task": user_message,
     }
 
 async def run_agent(user_message: str):

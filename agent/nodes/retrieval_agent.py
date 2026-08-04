@@ -5,17 +5,22 @@ from langgraph.types import interrupt
 
 
 async def retrieval_agent(state:AgentState):
-
+    task = state["remaining_task"] or state["message"]
     approval=interrupt(
         "This action will query the RAG system through the MCP server. Approve?"
     )
     if not approval:
         result = "The retrieval request was cancelled by the user."
         updated_results = state["specialist_results"] + [result]
-        return{
+        updated_completed_agents = (
+            state["completed_agents"] + ["retrieval_agent"]
+        )
+        return {
             "response": result,
             "selected_agent": "retrieval_agent",
             "specialist_results": updated_results,
+            "completed_agents": updated_completed_agents,
+            "remaining_task": "",
         }
 
     client=create_mcp_client() #create the connection object
@@ -37,7 +42,7 @@ async def retrieval_agent(state:AgentState):
     # 'answer':...
     # 'documents':...
     tool_result = await ask_rag_tool.ainvoke(
-        {"query": state["message"]}
+        {"query": task}
     )
     # ainvoke bc asynchronous -> while waiting, the event loop can run other asynchronous tasks
     # bc it takes time
@@ -52,10 +57,15 @@ async def retrieval_agent(state:AgentState):
     result = parsed_result["answer"]
 
     updated_results = state["specialist_results"] + [result]
+    updated_completed_agents = (
+        state["completed_agents"] + ["retrieval_agent"]
+    )
 
     return {
         "response": result,
         "selected_agent": "retrieval_agent",
         "specialist_results": updated_results,
+        "completed_agents": updated_completed_agents,
+        "remaining_task": "",
     }
 

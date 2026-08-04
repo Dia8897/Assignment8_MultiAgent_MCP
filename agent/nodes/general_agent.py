@@ -9,6 +9,8 @@ from agent.state.agent_state import AgentState
 
 
 def general_agent(state: AgentState):
+    task = state["remaining_task"] or state["message"]
+
     prompt = f"""
         You are a general-purpose specialist
 
@@ -16,18 +18,24 @@ def general_agent(state: AgentState):
 
         Keep the answer clear and concise
 
-        User question:
+        Original user question:
         {state["message"]}
+
+        Assigned task:
+        {task}
     """
 
     response = llm.invoke(prompt).text.strip()
     
     updated_results = state["specialist_results"] + [response]
+    updated_completed_agents = state["completed_agents"] + ["general_agent"]
 
     return {
         "response": response,
         "selected_agent": "general_agent",
-        "specialist_results": updated_results
+        "specialist_results": updated_results,
+        "completed_agents": updated_completed_agents,
+        "remaining_task": "",
     }
 
 

@@ -1,5 +1,6 @@
 from agent.state.agent_state import AgentState
 from agent.llm.ai_model import llm
+import json
 
 ALLOWED_AGENTS = {
     "retrieval_agent",
@@ -7,61 +8,159 @@ ALLOWED_AGENTS = {
 }
 MAX_ITERATIONS = 3
 
+def combine_results(results: list[str]) -> str:
+    return "\n\n".join(
+        result.strip()
+        for result in results
+        if result and result.strip()
+    )
 
 def supervisor(state:AgentState):
+
+    completed_agents = set(state["completed_agents"])
+    required_agents = state["required_agents"]
+    agent_tasks = state["agent_tasks"]
+    combined_response = combine_results(state["specialist_results"])
+
+   
         
-        if state["iteration_count"]>=MAX_ITERATIONS:
-              return{
-                "next_agent": "end",
-                "response": (
-                    "The maximum number of routing attempts was reached"
-                    "Here is the partial result available so far"
-                )
-              }
-
-        if state["specialist_results"]:
-            return {
-                "next_agent": "end"
-            }
-                
+        
+    if not required_agents:
         prompt = f"""
-            You are a routing supervisor
+            You are a routing planner.
 
-            Your only job is to choose which specialist should handle the request
-            Do not answer the user
+            Create the complete specialist plan before any specialist runs.
 
-            Available agents:
+            retrieval_agent handles:
+            - Product prices, ingredients, labels, brands, availability, stores,
+            locations, barcodes, product records, uploaded documents, and
+            questions requiring evidence from the RAG datasets.
 
-            retrieval_agent:
-            - Questions about product prices, ingredients, labels, brands, availability,
-            stores, locations, barcodes, food products, beauty products, or uploaded documents
-            - Questions that require evidence from the project's RAG datasets
+            general_agent handles:
+            - General knowledge, AI, programming, explanations, writing,
+            reasoning, and information not found through product retrieval.
 
-            general_agent:
-            - General knowledge questions
-            - Questions about AI, programming, LangGraph, agents, writing, explanations,
-            brainstorming, or topics unrelated to the product RAG datasets
+            Rules:
+            - Use exactly one specialist when that specialist can answer the
+            complete request.
+            - Use both specialists only when the user explicitly asks for
+            separate retrieval and general-knowledge tasks.
+            - Do not add a second specialist merely to expand, rewrite, verify,
+            summarize, or comment on a complete answer.
+            - Preserve the order requested by the user.
+            - Each task must contain only the portion assigned to that specialist.
 
             Examples:
-            - "What is the price of Nutella?" -> retrieval_agent
-            - "What ingredients does this product contain?" -> retrieval_agent
-            - "What is an AI agent?" -> general_agent
-            - "Explain LangGraph" -> general_agent
-            - "Write a short poem" -> general_agent
 
-            Reply with exactly one name:
-            retrieval_agent
-            general_agent
+            "What ingredients are listed for Coca-Cola?"
+            -> retrieval_agent only
+
+            "What is an AI agent?"
+            -> general_agent only
+
+            "What is the difference between an LLM and an embedding model?"
+            -> general_agent only
+
+            "Find the available Coca-Cola ingredients, then explain why ingredient
+            lists may vary between countries."
+            -> retrieval_agent, then general_agent
+
+            Reply with exactly one JSON object:
+            {{
+            "required_agents": ["retrieval_agent"],
+            "agent_tasks": {{
+                "retrieval_agent": "focused task"
+            }}
+            }}
+
+            Use a two-item required_agents list only for a genuine multi-part request.
 
             User question:
             {state["message"]}
-            """
+        """
 
-        decision=llm.invoke(prompt).text.strip()
-        if decision not in ALLOWED_AGENTS:
-            decision = "general_agent"
-        current_count=state["iteration_count"]
-        return{
-                "next_agent":decision,
-                "iteration_count":current_count+1
+        raw_plan = llm.invoke(prompt).text.strip()
+
+        try:
+            parsed_plan = json.loads(raw_plan)
+            proposed_agents = parsed_plan.get("required_agents", [])
+            proposed_tasks = parsed_plan.get("agent_tasks", {})
+        except (json.JSONDecodeError, AttributeError):
+            proposed_agents = []
+            proposed_tasks = {}
+
+        validated_agents = []
+
+        if isinstance(proposed_agents, list):
+            for agent_name in proposed_agents:
+                if (
+                    agent_name in ALLOWED_AGENTS
+                    and agent_name not in validated_agents
+                ):
+                    validated_agents.append(agent_name)
+
+        # Safe fallback: preserve the original general-agent fallback.
+        if not validated_agents:
+            validated_agents = ["general_agent"]
+            proposed_tasks = {
+                "general_agent": state["message"],
+            }
+
+        # There are only two specialists; reject oversized plans.
+        validated_agents = validated_agents[:2]
+
+        if not isinstance(proposed_tasks, dict):
+            proposed_tasks = {}
+
+        validated_tasks = {
+            agent_name: (
+                proposed_tasks.get(agent_name, state["message"])
+                if isinstance(proposed_tasks.get(agent_name), str)
+                else state["message"]
+            )
+            for agent_name in validated_agents
         }
+
+        required_agents = validated_agents
+        agent_tasks = validated_tasks
+
+    pending_agents = [
+        agent_name
+        for agent_name in required_agents
+        if agent_name not in completed_agents
+    ]
+
+    if not pending_agents:
+        return {
+            "next_agent": "end",
+            "response": combined_response,
+            "remaining_task": "",
+        }
+
+    if state["iteration_count"] >= MAX_ITERATIONS:
+        response = combined_response
+
+        if response:
+            response += "\n\n"
+
+        response += "The maximum number of routing attempts was reached."
+
+        return {
+            "next_agent": "end",
+            "response": response,
+            "remaining_task": "",
+        }
+
+    decision = pending_agents[0]
+    remaining_task = agent_tasks.get(decision, state["message"])
+
+    if not isinstance(remaining_task, str) or not remaining_task.strip():
+        remaining_task = state["message"]
+
+    return {
+        "next_agent": decision,
+        "required_agents": required_agents,
+        "agent_tasks": agent_tasks,
+        "remaining_task": remaining_task.strip(),
+        "iteration_count": state["iteration_count"] + 1,
+    }
