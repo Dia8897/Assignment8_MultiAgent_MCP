@@ -4,7 +4,25 @@ import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
+from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
+
+
 load_dotenv()
+
+mcp_api_token = os.getenv("MCP_API_TOKEN")
+
+if not mcp_api_token:
+    raise ValueError("MCP_API_TOKEN is missing")
+
+token_verifier = StaticTokenVerifier(
+    tokens={
+        mcp_api_token: {
+            "client_id": "assignment8-client",
+            "scopes": ["rag:read"],
+        }
+    },
+    required_scopes=["rag:read"],
+)
 
 rag_project_path = Path(
     os.getenv("RAG_PROJECT_PATH", "")
@@ -21,7 +39,7 @@ sys.path.insert(0, str(rag_project_path))
 from src.rag_service import RAGService
 
 
-mcp = FastMCP("RAG Server")
+mcp = FastMCP("RAG Server", auth=token_verifier,)
 rag_service = RAGService()
 
 # @mcp.tool
@@ -37,6 +55,7 @@ def ask_rag(query: str) -> dict:
     Answer a user question using the RAG system
     Returns the generated answer together with the retrieved evidence
     """
+    print("ask_rag called:", query)
     return rag_service.ask_rag(query)
 
 @mcp.tool
@@ -67,5 +86,10 @@ def get_rag_datasets()->dict:
         }
     }
 
-# if __name__ == "__main__":
-#     mcp.run()
+if __name__ == "__main__":
+    mcp.run(
+        transport="http",
+        host="0.0.0.0",
+        port=8000,
+    )
+    

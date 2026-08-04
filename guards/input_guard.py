@@ -1,15 +1,19 @@
 # hybrid approach:
 # rules + LLM classifier
 
+import re
 from agent.state.agent_state import AgentState
 from guards.input_classifier import classify_input
 MAX_INPUT_LENGTH = 1000
 
-BLOCKED_PHRASES = [
-    "ignore previous instructions",
-    "forget previous instructions",
-    "reveal the system prompt",
-    "show the system prompt",
+BLOCKED_PATTERNS = [
+    r"\b(ignore|disregard|override)\b.*\b(previous|earlier|all)\b.*\binstructions?\b",
+    r"\b(forget|discard)\b.*\b(previous|earlier|all)\b.*\binstructions?\b",
+    r"\b(reveal|show|display|expose|print)\b.*\b(system|hidden|internal)\b.*\b(prompt|instructions?)\b",
+    r"\bwhat\b.*\b(system|hidden|internal)\b.*\b(prompt|instructions?)\b",
+    r"\b(ignore|bypass|disable)\b.*\b(safety|guardrails?|restrictions?)\b",
+    r"\b(act|pretend)\b.*\bas\b.*\b(developer|system)\b",
+    r"\byou are now\b.*\b(developer|system)\b",
 ]
 
 def input_guard(state:AgentState):
@@ -37,21 +41,23 @@ def input_guard(state:AgentState):
             "response": guard_message,
             "next_agent": "end",
         }
-    matched_phrase=next(
+    matched_pattern = next(
         (
-            phrase
-            for phrase in BLOCKED_PHRASES
-            if phrase in message_lower
+            pattern
+            for pattern in BLOCKED_PATTERNS
+            if re.search(pattern, message_lower)
         ),
-        None
-    )  
-    if matched_phrase:
+        None,
+    )
+
+    if matched_pattern:
         guard_message=(
-            "The request was blocked because it appears to contain "
+            "The request was blocked by regex input guard because it appears to contain "
             "a prompt-injection attempt."            
         )  
         return {
             "input_safe": False,
+            "input_classification": "UNSAFE",
             "guard_message": guard_message,
             "response": guard_message,
             "next_agent": "end",

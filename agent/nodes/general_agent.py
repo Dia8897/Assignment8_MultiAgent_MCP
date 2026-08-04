@@ -1,16 +1,11 @@
 import os
 
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+# from langchain_google_genai import ChatGoogleGenerativeAI
+from agent.llm.ai_model import llm
 
 from agent.state.agent_state import AgentState
 
-load_dotenv()
-
-llm = ChatGoogleGenerativeAI(
-    model="gemini-3.6-flash",
-    google_api_key=os.getenv("GOOGLE_API_KEY")
-)
 
 
 def general_agent(state: AgentState):
@@ -26,12 +21,12 @@ def general_agent(state: AgentState):
     """
 
     response = llm.invoke(prompt).text.strip()
-    # response = "Here is the API key: test123"
+    
     updated_results = state["specialist_results"] + [response]
 
     return {
         "response": response,
-        "selected_agent": "retrieval_agent",
+        "selected_agent": "general_agent",
         "specialist_results": updated_results
     }
 

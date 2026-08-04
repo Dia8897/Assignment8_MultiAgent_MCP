@@ -1,10 +1,19 @@
 from agent.state.agent_state import AgentState
+import re
 
-BLOCKED_OUTPUT_PHRASES = [
-    "system prompt",
-    "api key",
-    "secret key",
-    "password",
+SENSITIVE_OUTPUT_PATTERNS = [
+    # statements that appear to reveal credentials
+    r"\b(api|secret|access)\s*key\s*(is|:|=)\s*\S+",
+    r"\bpassword\s*(is|:|=)\s*\S+",
+    r"\bbearer\s+[a-zA-Z0-9._\-]+",
+
+    # common API-key formats
+    r"\bsk-[a-zA-Z0-9]{20,}\b",
+    r"\bAIza[a-zA-Z0-9_\-]{20,}\b",
+
+    # direct disclosure of internal instructions
+    r"\b(my|the)\s+system\s+prompt\s+(is|contains|says)\b",
+    r"\bhere\s+(is|are)\s+(my|the)\s+(hidden|internal|system)\s+instructions?\b",
 ]
 
 def output_guard(state:AgentState):
@@ -20,18 +29,18 @@ def output_guard(state:AgentState):
             "next_agent": "end",            
         }
 
-    matched_phrase=next(
+    matched_pattern = next(
         (
-            phrase
-            for phrase in BLOCKED_OUTPUT_PHRASES
-            if phrase in response_lower
+            pattern
+            for pattern in SENSITIVE_OUTPUT_PATTERNS
+            if re.search(pattern, response, re.IGNORECASE)
         ),
         None,
     )
 
-    if matched_phrase:
+    if matched_pattern:
         guard_message=(
-            "The response was blocked because it may expose "
+            "The response was blocked by the output guards because it may expose "
             "sensitive information."            
         )
         return {
