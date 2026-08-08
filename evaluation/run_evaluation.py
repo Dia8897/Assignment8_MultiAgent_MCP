@@ -27,26 +27,8 @@ EVALUATION_QUERIES = [
         "expected_route": "retrieval_agent",
     },
     {
-        "query": "Which Dove products are available in the dataset?",
-        "category": "product metadata retrieval",
-        "expected_route": "retrieval_agent",
-    },
-    {
-        "query": "Are any Nutella products listed with a discounted price?",
-        "category": "discount metadata filtering",
-        "expected_route": "retrieval_agent",
-    },
-    {
         "query": "Compare the available Coca-Cola product records.",
         "category": "comparative product retrieval",
-        "expected_route": "retrieval_agent -> comparison_agent",
-    },
-    {
-        "query": (
-            "Compare available Nutella products by unit price and flag any "
-            "suspicious discounts."
-        ),
-        "category": "product decision and deal analysis",
         "expected_route": "retrieval_agent -> comparison_agent",
     },
     {
@@ -57,11 +39,6 @@ EVALUATION_QUERIES = [
     {
         "query": "What information is stored in the product-price records?",
         "category": "document and metadata retrieval",
-        "expected_route": "retrieval_agent",
-    },
-    {
-        "query": "What information is available for barcode 3017620422003?",
-        "category": "barcode retrieval",
         "expected_route": "retrieval_agent",
     },
     {

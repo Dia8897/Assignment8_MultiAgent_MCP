@@ -49,13 +49,13 @@
   },
   {
     "user_input": "What information is available for barcode 3017620422003?",
-    "response": "The barcode 3017620422003 was not found in the provided evidence.",
+    "response": "The provided evidence does not contain information for barcode 3017620422003.",
     "retrieved_contexts": [
       "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trancetto cacao\nEn: Balconi\nIt: Trancetto al cacao magro\n\nBrand:\nBalconi\n\n=== COMPOSITION AND LABELS ===",
       "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trio Jambon emmental\nZh: 三重火腿埃门塔尔奶酪三明治\n\nBrand:\nIntermarché, Monique ranou\n\n=== COMPOSITION AND LABELS ===",
       "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Brioche tressée à la main\n\nBrand:\nLidl, Maître Jean Pierre\n\n=== COMPOSITION AND LABELS ===",
       "Ienst: www.intermarche.be MP: ITM Alimentaire Belgium sa-B-1348 Louvain-lo-Neuve 3250390 80987",
-      "Labels:\nFrench meat,French poultry,Barcode clash\n\n=== NUTRITION AND SCORES ===\n\nNutrition:\nEnergy Kcal: 122.20 kcal/100g, Energy Kj: 516.79 kJ/100g, Fat: 8.40 g/100g, Saturated Fat: 2.33 g/100g, Carbohydrates: 0.00 g/100g, Proteins: 12.13 g/100g, Salt: 0.0018 g/100g, Sodium: 0.0007 g/100g\n\nNutri-Score:\nA\n\nNOVA Group:\n4\n\nEnvironmental Score:\nB"
+      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trancetto Cacao\n\nBrand:\nBalconi\n\n=== COMPOSITION AND LABELS ==="
     ],
     "reference": "Barcode 3017620422003 has a price observation of 3.34 EUR on 2024-02-15 at Carrefour Contact in Marcq-en-Baroeul, France, supported by a price-tag proof image."
   }
