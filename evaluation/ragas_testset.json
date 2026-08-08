@@ -1,0 +1,22 @@
+[
+  {
+    "user_input": "What ingredients are listed for Coca-Cola?",
+    "reference": "Coca-Cola records list water, sugar, carbon dioxide, colour E150d, phosphoric acid, natural flavouring, and caffeine flavouring."
+  },
+  {
+    "user_input": "In which countries were Dove products found?",
+    "reference": "The retrieved Dove product records include Estonia, Germany, the United States, and France."
+  },
+  {
+    "user_input": "Which Dove products are available in the dataset?",
+    "reference": "The dataset includes Dove's Farm Apricot and Chia Oat Bars, Dove Nourishing Care shower gel 400 ml, Dove Milk Chocolate Promises, and Dove roll-on deodorant."
+  },
+  {
+    "user_input": "Are any Nutella products listed with a discounted price?",
+    "reference": "Nutella is listed at a discounted price of 1.99 EUR from 3.49 EUR, and Nutella Nuss-Nugat-Creme is listed at 1.79 EUR from 3.49 EUR."
+  },
+  {
+    "user_input": "What information is available for barcode 3017620422003?",
+    "reference": "Barcode 3017620422003 has a price observation of 3.34 EUR on 2024-02-15 at Carrefour Contact in Marcq-en-Baroeul, France, supported by a price-tag proof image."
+  }
+]

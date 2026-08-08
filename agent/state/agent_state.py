@@ -1,6 +1,8 @@
 from typing import TypedDict
 class AgentState(TypedDict):
     message:str
+    conversation_history:str
+    retrieved_evidence:str
     response:str
     next_agent:str 
     selected_agent:str #to avoid losing info abt who handled the req when "end"
@@ -14,4 +16,3 @@ class AgentState(TypedDict):
     output_safe:bool
     guard_message:str
     input_classification:str
-    

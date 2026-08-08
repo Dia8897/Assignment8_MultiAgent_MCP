@@ -18,6 +18,9 @@ def general_agent(state: AgentState):
 
         Keep the answer clear and concise
 
+        Prior conversation (context only):
+        {state["conversation_history"] or "No prior conversation."}
+
         Original user question:
         {state["message"]}
 

@@ -1,18 +1,20 @@
 import os
+
 from dotenv import load_dotenv
-# from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-# load_dotenv()
 
-# llm = ChatGoogleGenerativeAI(
-#     model="gemini-3.6-flash",
-#     google_api_key=os.getenv("GOOGLE_API_KEY")
-# )
+load_dotenv()
 
-from langchain_ollama import ChatOllama
+google_api_key = os.getenv("GOOGLE_API_KEY")
+if not google_api_key:
+    raise ValueError(
+        "GOOGLE_API_KEY is missing. Add it to the project's .env file."
+    )
 
-llm = ChatOllama(
-    model="qwen2.5:7b",
-    base_url="http://localhost:11434",
-    temperature=0,
+# Flash-Lite is used for low-latency routing, extraction, summarization, and
+# general responses. The explicit key keeps configuration local to this project.
+llm = ChatGoogleGenerativeAI(
+    model="gemini-3.5-flash-lite",
+    google_api_key=google_api_key,
 )

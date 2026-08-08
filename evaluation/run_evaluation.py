@@ -39,7 +39,20 @@ EVALUATION_QUERIES = [
     {
         "query": "Compare the available Coca-Cola product records.",
         "category": "comparative product retrieval",
-        "expected_route": "retrieval_agent",
+        "expected_route": "retrieval_agent -> comparison_agent",
+    },
+    {
+        "query": (
+            "Compare available Nutella products by unit price and flag any "
+            "suspicious discounts."
+        ),
+        "category": "product decision and deal analysis",
+        "expected_route": "retrieval_agent -> comparison_agent",
+    },
+    {
+        "query": "Check openFDA for food recalls involving salmonella.",
+        "category": "live external recall lookup",
+        "expected_route": "recall_agent",
     },
     {
         "query": "What information is stored in the product-price records?",

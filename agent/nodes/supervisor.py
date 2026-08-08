@@ -5,8 +5,10 @@ import json
 ALLOWED_AGENTS = {
     "retrieval_agent",
     "general_agent",
+    "comparison_agent",
+    "recall_agent",
 }
-MAX_ITERATIONS = 3
+MAX_ITERATIONS = 4
 
 def combine_results(results: list[str]) -> str:
     return "\n\n".join(
@@ -27,45 +29,21 @@ def supervisor(state:AgentState):
         
     if not required_agents:
         prompt = f"""
-            You are a routing planner.
+            Plan the complete route using only these specialists:
+            - general_agent: general knowledge, programming, writing, explanations.
+            - retrieval_agent: product/document facts from the local RAG system.
+            - comparison_agent: product ranking, unit price, weighted comparison,
+              or discount analysis; it must follow retrieval_agent.
+            - recall_agent: live or historical openFDA food recall searches; no RAG.
 
-            Create the complete specialist plan before any specialist runs.
+            Required routes:
+            - Product fact question -> ["retrieval_agent"]
+            - General question -> ["general_agent"]
+            - Product comparison -> ["retrieval_agent", "comparison_agent"]
+            - FDA recall question -> ["recall_agent"]
+            Use additional agents only for explicitly separate tasks. Preserve order.
 
-            retrieval_agent handles:
-            - Product prices, ingredients, labels, brands, availability, stores,
-            locations, barcodes, product records, uploaded documents, and
-            questions requiring evidence from the RAG datasets.
-
-            general_agent handles:
-            - General knowledge, AI, programming, explanations, writing,
-            reasoning, and information not found through product retrieval.
-
-            Rules:
-            - Use exactly one specialist when that specialist can answer the
-            complete request.
-            - Use both specialists only when the user explicitly asks for
-            separate retrieval and general-knowledge tasks.
-            - Do not add a second specialist merely to expand, rewrite, verify,
-            summarize, or comment on a complete answer.
-            - Preserve the order requested by the user.
-            - Each task must contain only the portion assigned to that specialist.
-
-            Examples:
-
-            "What ingredients are listed for Coca-Cola?"
-            -> retrieval_agent only
-
-            "What is an AI agent?"
-            -> general_agent only
-
-            "What is the difference between an LLM and an embedding model?"
-            -> general_agent only
-
-            "Find the available Coca-Cola ingredients, then explain why ingredient
-            lists may vary between countries."
-            -> retrieval_agent, then general_agent
-
-            Reply with exactly one JSON object:
+            Return exactly one JSON object and no markdown:
             {{
             "required_agents": ["retrieval_agent"],
             "agent_tasks": {{
@@ -73,13 +51,17 @@ def supervisor(state:AgentState):
             }}
             }}
 
-            Use a two-item required_agents list only for a genuine multi-part request.
+            Prior conversation for resolving references:
+            {state["conversation_history"] or "No prior conversation."}
 
             User question:
             {state["message"]}
         """
 
         raw_plan = llm.invoke(prompt).text.strip()
+        if raw_plan.startswith("```"):
+            raw_plan = raw_plan.removeprefix("```json").removeprefix("```")
+            raw_plan = raw_plan.removesuffix("```").strip()
 
         try:
             parsed_plan = json.loads(raw_plan)
@@ -99,6 +81,19 @@ def supervisor(state:AgentState):
                 ):
                     validated_agents.append(agent_name)
 
+        # Structural invariant: comparison consumes retrieval evidence.
+        if "comparison_agent" in validated_agents:
+            without_comparison = [
+                agent_name
+                for agent_name in validated_agents
+                if agent_name not in {"retrieval_agent", "comparison_agent"}
+            ]
+            validated_agents = [
+                "retrieval_agent",
+                "comparison_agent",
+                *without_comparison,
+            ]
+
         # Safe fallback: preserve the original general-agent fallback.
         if not validated_agents:
             validated_agents = ["general_agent"]
@@ -106,8 +101,8 @@ def supervisor(state:AgentState):
                 "general_agent": state["message"],
             }
 
-        # There are only two specialists; reject oversized plans.
-        validated_agents = validated_agents[:2]
+        # Keep plans within the graph's iteration cap.
+        validated_agents = validated_agents[:MAX_ITERATIONS]
 
         if not isinstance(proposed_tasks, dict):
             proposed_tasks = {}

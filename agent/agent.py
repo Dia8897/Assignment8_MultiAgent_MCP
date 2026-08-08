@@ -5,9 +5,14 @@ from langgraph.types import Command
 
 
 
-def create_initial_state(user_message: str) -> dict:
+def create_initial_state(
+    user_message: str,
+    conversation_history: str = "",
+) -> dict:
     return {
         "message": user_message,
+        "conversation_history": conversation_history,
+        "retrieved_evidence": "",
         "response": "",
         "next_agent": "",
         "selected_agent": "",
@@ -23,8 +28,8 @@ def create_initial_state(user_message: str) -> dict:
         "remaining_task": user_message,
     }
 
-async def run_agent(user_message: str):
-    initial_state = create_initial_state(user_message)
+async def run_agent(user_message: str, conversation_history: str = ""):
+    initial_state = create_initial_state(user_message, conversation_history)
 
     config = {
             "configurable": {

@@ -3,6 +3,8 @@ from agent.state.agent_state import AgentState
 from agent.nodes.supervisor import supervisor
 from agent.nodes.general_agent import general_agent
 from agent.nodes.retrieval_agent import retrieval_agent
+from agent.nodes.comparison_agent import comparison_agent
+from agent.nodes.recall_agent import recall_agent
 from guards.input_guard import input_guard
 from guards.output_guard import output_guard
 from langgraph.checkpoint.memory import InMemorySaver
@@ -27,6 +29,8 @@ graph_builder.add_node("output_guard", output_guard)
 graph_builder.add_node("supervisor",supervisor)
 graph_builder.add_node("general_agent",general_agent)
 graph_builder.add_node("retrieval_agent", retrieval_agent)
+graph_builder.add_node("comparison_agent", comparison_agent)
+graph_builder.add_node("recall_agent", recall_agent)
 
 graph_builder.add_conditional_edges(
     "supervisor",
@@ -34,6 +38,8 @@ graph_builder.add_conditional_edges(
     {
         "general_agent": "general_agent",
         "retrieval_agent": "retrieval_agent",
+        "comparison_agent": "comparison_agent",
+        "recall_agent": "recall_agent",
         "end": "output_guard",
     },
 )
@@ -50,6 +56,8 @@ graph_builder.add_conditional_edges(
 graph_builder.add_edge(START, "input_guard")
 graph_builder.add_edge("general_agent", "supervisor")
 graph_builder.add_edge("retrieval_agent", "supervisor")
+graph_builder.add_edge("comparison_agent", "supervisor")
+graph_builder.add_edge("recall_agent", "supervisor")
 graph_builder.add_edge("output_guard", END)
 
 
