@@ -12,8 +12,6 @@ if not google_api_key:
         "GOOGLE_API_KEY is missing. Add it to the project's .env file."
     )
 
-# Flash-Lite is used for low-latency routing, extraction, summarization, and
-# general responses. The explicit key keeps configuration local to this project.
 llm = ChatGoogleGenerativeAI(
     model="gemini-3.5-flash-lite",
     google_api_key=google_api_key,

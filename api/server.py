@@ -116,7 +116,7 @@ def request_identifiers(request: OpenAIChatRequest) -> tuple[str, str]:
 
     # Open WebUI may remove chat_id before forwarding an OpenAI-compatible
     # request. Its request still contains the full message history, so use the
-    # immediately preceding assistant reply to reconnect to the saved chat.
+    # immediately preceding assistant reply to reconnect to the saved chat
     if not conversation_id and len(request.messages) >= 2:
         previous_message = request.messages[-2]
         if previous_message.role == "assistant":
@@ -161,8 +161,7 @@ def persist_exchange_message(
 def mysql_conversation_context(conversation_id: str) -> str:
     history = get_conversation_history(conversation_id)
 
-    # The current user message was just saved; it is already passed separately
-    # to the graph and must not be duplicated in the history context.
+ 
     prior_messages = [
         message
         for message in history[:-1]
