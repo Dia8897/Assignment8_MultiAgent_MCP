@@ -24,20 +24,8 @@
     "reference": "The retrieved Dove product records include Estonia, Germany, the United States, and France."
   },
   {
-    "user_input": "Which Dove products are available in the dataset?",
-    "response": "The following Dove products are available in the dataset:\n* dove [2]\n* Dove [4]",
-    "retrieved_contexts": [
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Recharge de dorure\n\nBrand:\nABCD, PEP\n\nCategories:\nAides culinaires\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nMain: Oeuf entier pasteurisé, gaz propu\nLseur: CO2.\nAllergens:\nEggs\n\n=== NUTRITION AND SCORES ===\n\nNutri-Score:\nUNKNOWN\n\nNOVA Group:\n4",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: dove\n\nBrand:\nDove\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nMain: water (water), cocamidopropyl betaine, sodium hydroxyprópyl štarch phosphate, lauric acid, sodium lauroyl glycinate, sodium lauroyl isethionate, hydrogenated soybean oil, glycine soja (soybean) oil, sodium chloride, glycerin, phenoxyethanol, guar hydroxypropyltrimonium chloride, stearic acid, citric acid, fragrance (parfum), sodium isethionate, bht, tetrasodium edta, jódopropynyl butylcarbamate\nAllergens:\nSoybeans",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Émincés de dinde kebab\n\nBrand:\nPère Dodu\n\nCategories:\nEmincés\n\n=== COMPOSITION AND LABELS ===",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Dove\n\nBrand:\nDove\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nRaw: >",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Escalope de dinde\n\nBrand:\nDouce France\n\nCategories:\nViandes et dérivés, Viandes, Volailles, Dinde et dérivés, Dindes, Escalopes de dinde\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nMain: escalope extra fine de dinde\n\nLabels:\nViande Française, Volaille Française\n\n=== NUTRITION AND SCORES ===\n\nNutri-Score:\nUNKNOWN\n\nEnvironmental Score:\nD"
-    ],
-    "reference": "The dataset includes Dove's Farm Apricot and Chia Oat Bars, Dove Nourishing Care shower gel 400 ml, Dove Milk Chocolate Promises, and Dove roll-on deodorant."
-  },
-  {
     "user_input": "Are any Nutella products listed with a discounted price?",
-    "response": "Yes, one Nutella product is listed with a discounted price [2]. The Nutella product has a price of 1.99 EUR, with the price before discount being 3.49 EUR [2].",
+    "response": "Yes, a Nutella product is listed with a discounted price [2]. The product is \"Nutella\" and its price before discount was 3.49 EUR, with a current price of 1.99 EUR [2].",
     "retrieved_contexts": [
       "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Nutella Croissant\n\nBrand:\nFerrero\n\nCategories:\nSnacks, Sweet snacks, Frozen foods, Biscuits and cakes, Sweet pastries and pies, Viennoiseries, Filled croissants, Frozen cakes and pastries, en:croissants\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nMain: Farina di FRUMENTO (24%), margarina vegetale [olio di palma, acqua, olio di girasole, sale, succo di limone concentrato], crema alle NOCCIOLE e al cacao 17% [zucchero, olio di palma, NOCCIOLE 13%** LATTE scremato in polvere 8,7%**, cacao magro 7,4%**, emulsio\nNanti: lecitine (SOIA); vanillina], lievito madre 14% (acqua, farina di FRUMENTO), acqua, zucchero, lievito di birra, BURRO anidro, glutine di FRUMENTO, UOVA, sale, sciroppo di glucosio, tuorlo d'UOVO, aroma, agente di rivestimento (pectine), colorante (beta-carotene). di cacao magro sul prodotto finito. *Corrisponde a 2,2% di nocciole, 1,4% di latte scremato in polvere e 1,2% Può contenere MANDORLE, NOCI, NOCI DI ACAGIÙ, NOCI DI PECAN, NOCI DEL BRASILE, PISTACCHI, NOCI MACADAMIA, SENAPE e SEMI DI SESAMO.\n\nEn: Wheat flour (24%), vegetable margarine [palm oil, water, sunflower oil, salt, concentrated lemon juice], hazelnut and cocoa cream 17% [sugar, palm oil, hazelnut 13%**, skimmed milk powder 8.7%**, low-fat cocoa 7.4%**, emulsi\nFiers: lecithin (soy); vanillin], sourdough 14% (water, wheat flour), water, sugar, brewer's yeast, anhydrous butter, wheat gluten, eggs, salt, glucose syrup, egg yolk, flavouring, glazing agent (pectin), colouring agent (beta carotene).\nAllergens:\nEggs, Gluten, Milk, Nuts, Soybeans\n\n=== NUTRITION AND SCORES ===\n\nNutrition:\nEnergy Kcal: 471.00 kcal/100g, Energy Kj: 1964.00 kJ/100g, Fat: 28.60 g/100g, Saturated Fat: 15.50 g/100g, Carbohydrates: 44.90 g/100g, Sugars: 16.70 g/100g, Proteins: 7.80 g/100g, Salt: 0.78 g/100g, Sodium: 0.31 g/100g\n\nNutri-Score:\nE\n\nNOVA Group:\n4\n\nEnvironmental Score:\nB",
       "=== PRICE ITEM ===\nRecord ID: 100266\nRecord Type: product\nProduct Code: 4008400401621\nProduct Name: Nutella\n=== PRICE INFORMATION ===\nPrice: 1.99 EUR\nDiscounted: True\nPrice Before Discount: 3.490\nObserved Date: 2025-04-14 00:00:00\n=== LOCATION ===\nLocation: Bayern, Deutschland\nCountry: Deutschland\n=== SOURCE AND PROOF ===\nProof Type: PRICE_TAG\nProof File: 0065/aj0CHqC3R3.jpg\nSource: Smoothie - OpenFoodFacts (4.19.0+1461) (android+RMX2086_11_F.06)",
@@ -46,17 +34,5 @@
       "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Nutella B-ready\n\nBrand:\nNutella\n\n=== COMPOSITION AND LABELS ===\n\nIngredients:\nMain: CREMA DE AVELLANAS CON CACAO 81,5% (AZÚCAR, ACEITE VEGETAL (PALMA), AVELLANAS, LECHE DESNATADA EN POLVO, CACAO PARCIALMENTE DESCREMADO EN POLVO, EMULGENTE LECITINAS, AROMA), HARINA DE TRIGO, LEVADURA, EXTRACTO DE MALTA DE CEBADA EN POLVO, SAL, LECHE DESNATADA EN POLVO, PROTEÍNA DE TRIGO, PROTEÍNA DE SUERO DE LECHE, EMULGENTE LECITINAS. ALÉRGENOS: CONTIENE AVELLANAS Y DERIVADOS DE LECHE, TRIGO, CEBADA Y SOJA. CONTIENE LACTOSA. CONTIENE GLUTEN.\nPt: Creme de avelã como cacau 81.5% (azúcar, óleo vegetal, avelãs, lente desnatado empó, cacau em po, proteína do trigo, proteína soro do leite\nAllergens:\nGluten, Milk, Nuts, Soybeans, Avellanas, Cebada, Harina De Trigo, Lactosa, Leche, Trigo\n\n=== NUTRITION AND SCORES ===\n\nNutrition:\nEnergy Kcal: 500.00 kcal/100g, Energy Kj: 2179.09 kJ/100g, Fat: 27.27 g/100g, Saturated Fat: 9.09 g/100g, Carbohydrates: 59.09 g/100g, Sugars: 45.45 g/100g, Proteins: 9.09 g/100g, Fiber: 1.36 g/100g, Salt: 0.45 g/100g, Sodium: 0.18 g/100g\n\nNutri-Score:\nE\n\nNOVA Group:\n4\n\nEnvironmental Score:\nD"
     ],
     "reference": "Nutella is listed at a discounted price of 1.99 EUR from 3.49 EUR, and Nutella Nuss-Nugat-Creme is listed at 1.79 EUR from 3.49 EUR."
-  },
-  {
-    "user_input": "What information is available for barcode 3017620422003?",
-    "response": "The provided evidence does not contain information for barcode 3017620422003.",
-    "retrieved_contexts": [
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trancetto cacao\nEn: Balconi\nIt: Trancetto al cacao magro\n\nBrand:\nBalconi\n\n=== COMPOSITION AND LABELS ===",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trio Jambon emmental\nZh: 三重火腿埃门塔尔奶酪三明治\n\nBrand:\nIntermarché, Monique ranou\n\n=== COMPOSITION AND LABELS ===",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Brioche tressée à la main\n\nBrand:\nLidl, Maître Jean Pierre\n\n=== COMPOSITION AND LABELS ===",
-      "Ienst: www.intermarche.be MP: ITM Alimentaire Belgium sa-B-1348 Louvain-lo-Neuve 3250390 80987",
-      "=== PRODUCT INFORMATION ===\n\nProduct:\nMain: Trancetto Cacao\n\nBrand:\nBalconi\n\n=== COMPOSITION AND LABELS ==="
-    ],
-    "reference": "Barcode 3017620422003 has a price observation of 3.34 EUR on 2024-02-15 at Carrefour Contact in Marcq-en-Baroeul, France, supported by a price-tag proof image."
   }
 ]

@@ -154,6 +154,7 @@ def analyze_products(
     comparable_prices = len(currencies) <= 1
     comparable_unit_types = len(unit_kinds) <= 1
 
+    resolved_weights = _normalized_weights(weights)
     unit_prices = [product["unit_price"] for product in prepared]
     total_prices = [product["current_price"] for product in prepared]
     ingredient_counts = [product["ingredient_count"] for product in prepared]
@@ -167,8 +168,6 @@ def analyze_products(
         total_prices = [None] * len(prepared)
     if not comparable_unit_types and resolved_weights["unit_price"] > 0:
         unit_prices = [None] * len(prepared)
-
-    resolved_weights = _normalized_weights(weights)
     metric_values = {
         "unit_price": unit_prices,
         "total_price": total_prices,
